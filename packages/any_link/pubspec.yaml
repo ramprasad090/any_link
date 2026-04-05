@@ -1,6 +1,6 @@
 name: any_link
 description: "Zero-dependency Flutter HTTP client. Replaces dio, http, connectivity_plus, cached_network_image. Built on dart:io directly. Auth, retry, pagination, batching, logging, and 80+ features."
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/ramprasad090/any_link
 repository: https://github.com/ramprasad090/any_link
 issue_tracker: https://github.com/ramprasad090/any_link/issues

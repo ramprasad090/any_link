@@ -1,6 +1,6 @@
 name: any_link_upload
 description: "Upload manager for any_link. Real progress tracking through 8 phases: validate, compress, hash, chunk, upload, server-processing, retry, complete. Zero extra dependencies."
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/ramprasad090/any_link
 repository: https://github.com/ramprasad090/any_link
 issue_tracker: https://github.com/ramprasad090/any_link/issues

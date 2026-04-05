@@ -1,6 +1,6 @@
 name: any_link_secure
 description: "Certificate pinning, HMAC request signing, AES-256 payload encryption, and mTLS for any_link. Pure Dart."
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/ramprasads090/any_link
 repository: https://github.com/ramprasad090/any_link
 issue_tracker: https://github.com/ramprasad090/any_link/issues
