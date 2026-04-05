@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dart --version)",
+      "Bash(dart doc:*)",
+      "Bash(dart pub:*)"
+    ]
+  }
+}

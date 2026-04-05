@@ -4,9 +4,10 @@ packages:
   any_link:
     dependency: "direct main"
     description:
-      path: "../any_link"
-      relative: true
-    source: path
+      name: any_link
+      sha256: "21394a6fb7c1c8a8b4163202cd7d47e641547a6c6d8f22465a4f9898f7ea1a95"
+      url: "https://pub.dev"
+    source: hosted
     version: "1.0.0"
   characters:
     dependency: transitive

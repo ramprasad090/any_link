@@ -16,8 +16,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  any_link:
-    path: ../any_link
+  any_link: ^1.0.0
 
 dev_dependencies:
   lints: ^5.0.0

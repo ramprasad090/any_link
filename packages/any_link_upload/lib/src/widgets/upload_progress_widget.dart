@@ -38,7 +38,6 @@ class _UploadProgressWidgetState extends State<UploadProgressWidget> {
   UploadEvent? _lastEvent;
   late final StreamSubscription<UploadEvent> _sub;
   String? _uploadId;
-  bool _started = false;
 
   @override
   void initState() {
@@ -54,7 +53,6 @@ class _UploadProgressWidgetState extends State<UploadProgressWidget> {
   }
 
   void _startUpload() async {
-    _started = true;
     final result = await widget.manager.upload(widget.request);
     _uploadId = result.uploadId;
   }
@@ -137,7 +135,7 @@ class _UploadProgressWidgetState extends State<UploadProgressWidget> {
 
   String _phaseLabel(UploadPhase phase) => switch (phase) {
         Validating() => 'Validating…',
-        Compressing(:final originalSize, :final compressedSize) =>
+        Compressing(:final compressedSize) =>
           compressedSize == null ? 'Compressing…' : 'Compressed ✓',
         Hashing() => 'Checking for duplicates…',
         Uploading() => '${_lastEvent?.progressPercent ?? 0}%',

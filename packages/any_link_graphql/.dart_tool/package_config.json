@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "any_link",
-      "rootUri": "../../any_link",
+      "rootUri": "file:///Users/ramprasadsreerama/.pub-cache/hosted/pub.dev/any_link-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },

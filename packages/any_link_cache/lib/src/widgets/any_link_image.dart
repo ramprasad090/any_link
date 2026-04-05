@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:any_link/any_link.dart';
 
 /// In-memory LRU image cache.
 class _ImageCache {

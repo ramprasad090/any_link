@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:any_link/any_link.dart';
+import 'sha256.dart';
 import 'upload_event.dart';
 import 'upload_phase.dart';
 import 'upload_request.dart';
@@ -38,6 +38,7 @@ class UploadManager {
 
   final Map<String, bool> _cancelled = {};
   final Map<String, bool> _paused = {};
+  final Map<String, UploadRequest> _requests = {};
 
   UploadManager({required this.client});
 
@@ -51,6 +52,7 @@ class UploadManager {
     final id = request.id ?? _generateId();
     _cancelled[id] = false;
     _paused[id] = false;
+    _requests[id] = request;
     return _runPipeline(id, request);
   }
 
@@ -71,11 +73,16 @@ class UploadManager {
   /// Cancel an in-progress upload.
   void cancel(String uploadId) => _cancelled[uploadId] = true;
 
-  /// Retry a previously failed upload.
+  /// Retry a previously failed or cancelled upload by its [uploadId].
   Future<UploadResult> retry(String uploadId) {
-    throw UnimplementedError(
-      'Pass the original UploadRequest again to upload() for a retry.',
-    );
+    final request = _requests[uploadId];
+    if (request == null) {
+      throw ArgumentError('No upload found for id "$uploadId". '
+          'Only uploads started via this manager instance can be retried.');
+    }
+    _cancelled[uploadId] = false;
+    _paused[uploadId] = false;
+    return _runPipeline(uploadId, request);
   }
 
   void pause(String uploadId) => _paused[uploadId] = true;
@@ -267,17 +274,13 @@ class UploadManager {
   }
 
   Future<String> _sha256(String filePath) async {
-    // Simple hash using file bytes XOR — replace with dart:crypto when available.
-    // Using a simple FNV-1a hash as placeholder (dart:crypto not in std lib).
-    int hash = 2166136261;
     final file = File(filePath);
+    final chunks = <int>[];
     await for (final chunk in file.openRead()) {
-      for (final byte in chunk) {
-        hash ^= byte;
-        hash = (hash * 16777619) & 0xFFFFFFFF;
-      }
+      chunks.addAll(chunk);
     }
-    return hash.toRadixString(16).padLeft(8, '0');
+    final digest = Sha256.hash(chunks);
+    return digest.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
   }
 
   void _emit(

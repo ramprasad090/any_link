@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'crypto/sha256.dart';
 
 /// Validates server certificates against known public-key hashes (SPKI pins).
 ///
 /// Protects against MITM attacks even from rogue CAs. The server certificate
 /// must match at least one of the registered pins.
+///
+/// Pins are SHA-256 hashes of the DER-encoded certificate, base64-encoded
+/// with the `sha256/` prefix — the same format used by Chrome and Android.
 ///
 /// ```dart
 /// final pinner = CertificatePinner(pins: {
@@ -26,27 +30,9 @@ class CertificatePinner {
     final allowedPins = pins[host];
     if (allowedPins == null) return true; // No pin registered — accept.
 
-    final certHash = _sha256Hex(cert.der);
-    final b64Pin = 'sha256/${base64.encode(_hexToBytes(certHash))}';
+    final digest = Sha256.hash(cert.der);
+    final b64Pin = 'sha256/${base64.encode(digest)}';
 
     return allowedPins.contains(b64Pin);
-  }
-
-  static String _sha256Hex(List<int> bytes) {
-    // Simple FNV hash as placeholder — replace with crypto package if available.
-    int h = 2166136261;
-    for (final b in bytes) {
-      h ^= b;
-      h = (h * 16777619) & 0xFFFFFFFF;
-    }
-    return h.toRadixString(16).padLeft(8, '0');
-  }
-
-  static List<int> _hexToBytes(String hex) {
-    final result = <int>[];
-    for (var i = 0; i < hex.length - 1; i += 2) {
-      result.add(int.parse(hex.substring(i, i + 2), radix: 16));
-    }
-    return result;
   }
 }

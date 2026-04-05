@@ -35,7 +35,13 @@ class AnyLinkClient {
     required this.config,
     List<AnyLinkInterceptor>? interceptors,
   }) : interceptors = interceptors ?? [] {
-    _nativeClient = HttpClient()
+    SecurityContext? ctx;
+    if (config.enableHttp2) {
+      // Advertise HTTP/2 via ALPN so the server can negotiate the upgrade.
+      ctx = SecurityContext(withTrustedRoots: true)
+        ..setAlpnProtocols(['h2', 'http/1.1'], false);
+    }
+    _nativeClient = HttpClient(context: ctx)
       ..connectionTimeout = config.connectTimeout
       ..idleTimeout = config.idleTimeout
       ..maxConnectionsPerHost = config.maxConnectionsPerHost

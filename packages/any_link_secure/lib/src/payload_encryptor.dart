@@ -1,26 +1,30 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:any_link/any_link.dart';
+import 'crypto/aes256.dart';
 
-/// AES-256-GCM request/response payload encryption interceptor.
+/// AES-256-CTR request/response payload encryption interceptor.
 ///
 /// Encrypts the request body before sending and decrypts the response body
 /// after receiving. Provides end-to-end encryption beyond TLS.
 ///
+/// Uses AES-256 in CTR mode — a pure-Dart implementation with no third-party
+/// dependencies. The key must be exactly 32 bytes. A random 16-byte nonce is
+/// generated per request and included in the payload.
+///
 /// For healthcare, fintech, and any app requiring confidentiality beyond HTTPS.
 ///
-/// **Note**: This uses a simplified XOR cipher as a placeholder because
-/// `dart:crypto` does not include AES-GCM. For production, integrate
-/// `package:pointycastle` or `package:cryptography`.
-///
 /// ```dart
-/// client.interceptors.add(PayloadEncryptor(key: base64.decode(preSharedKey)));
+/// final key = base64.decode(preSharedBase64Key); // 32 bytes
+/// client.interceptors.add(PayloadEncryptor(key: key));
 /// ```
 class PayloadEncryptor extends AnyLinkInterceptor {
+  /// 32-byte AES-256 key.
   final List<int> key;
 
-  PayloadEncryptor({required this.key});
+  PayloadEncryptor({required this.key}) {
+    assert(key.length == 32, 'PayloadEncryptor key must be exactly 32 bytes');
+  }
 
   @override
   Future<AnyLinkRequest> onRequest(AnyLinkRequest request) async {
@@ -36,8 +40,8 @@ class PayloadEncryptor extends AnyLinkInterceptor {
       return request;
     }
 
-    final nonce = _generateNonce();
-    final encrypted = _xorEncrypt(utf8.encode(plaintext), key, nonce);
+    final nonce = _generateNonce(); // 16 bytes
+    final encrypted = Aes256Ctr.ctr(utf8.encode(plaintext), key, nonce);
     final payload = {
       'nonce': base64.encode(nonce),
       'data': base64.encode(encrypted),
@@ -57,7 +61,7 @@ class PayloadEncryptor extends AnyLinkInterceptor {
       final json = response.jsonMap;
       final nonce = base64.decode(json['nonce'] as String);
       final data = base64.decode(json['data'] as String);
-      final decrypted = _xorEncrypt(data, key, nonce); // XOR is symmetric
+      final decrypted = Aes256Ctr.ctr(data, key, nonce);
       return AnyLinkResponse(
         statusCode: response.statusCode,
         headers: response.headers,
@@ -77,14 +81,6 @@ class PayloadEncryptor extends AnyLinkInterceptor {
 
   List<int> _generateNonce() {
     final rng = Random.secure();
-    return List.generate(12, (_) => rng.nextInt(256));
-  }
-
-  List<int> _xorEncrypt(List<int> data, List<int> k, List<int> nonce) {
-    final result = List<int>.from(data);
-    for (var i = 0; i < result.length; i++) {
-      result[i] ^= k[i % k.length] ^ nonce[i % nonce.length];
-    }
-    return result;
+    return List.generate(16, (_) => rng.nextInt(256));
   }
 }

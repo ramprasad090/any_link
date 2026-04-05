@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:any_link/any_link.dart';
+import 'crypto/sha256.dart';
 
 /// HMAC-SHA256 request signing interceptor.
 ///
@@ -51,37 +52,8 @@ class RequestSigner extends AnyLinkInterceptor {
   @override
   Future<AnyLinkError> onError(AnyLinkError error) async => error;
 
-  /// Simple HMAC-SHA256 implementation using XOR-based approach.
-  /// For production use, integrate `package:crypto` (add as dependency).
   String _hmacSha256(String message, String key) {
-    final keyBytes = utf8.encode(key);
-    final msgBytes = utf8.encode(message);
-
-    // Simple HMAC using FNV as inner hash (production: use dart:crypto SHA256).
-    const blockSize = 64;
-    List<int> k = keyBytes.length > blockSize ? _fnvHash(keyBytes) : keyBytes;
-    k = [...k, ...List.filled(blockSize - k.length, 0)];
-
-    final ipad = k.map((b) => b ^ 0x36).toList();
-    final opad = k.map((b) => b ^ 0x5C).toList();
-
-    final inner = _fnvHash([...ipad, ...msgBytes]);
-    final outer = _fnvHash([...opad, ...inner]);
-    return base64.encode(outer);
-  }
-
-  List<int> _fnvHash(List<int> data) {
-    int h = 2166136261;
-    for (final b in data) {
-      h ^= b;
-      h = (h * 16777619) & 0xFFFFFFFF;
-    }
-    // Return as 4-byte list.
-    return [
-      (h >> 24) & 0xff,
-      (h >> 16) & 0xff,
-      (h >> 8) & 0xff,
-      h & 0xff,
-    ];
+    final mac = Sha256.hmac(utf8.encode(key), utf8.encode(message));
+    return base64.encode(mac);
   }
 }
