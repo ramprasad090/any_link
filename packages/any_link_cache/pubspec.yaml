@@ -1,0 +1,36 @@
+name: any_link_cache
+description: "Response cache, disk cache, ETag conditional requests, and network image cache for any_link. Replaces cached_network_image. Zero extra dependencies."
+version: 1.0.0
+homepage: https://github.com/ramprasads090/any_link
+repository: https://github.com/ramprasad090/any_link
+issue_tracker: https://github.com/ramprasad090/any_link/issues
+
+topics:
+  - cache
+  - http-cache
+  - offline
+  - image-cache
+  - etag
+
+platforms:
+  android:
+  ios:
+  web:
+  macos:
+  windows:
+  linux:
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  any_link:
+    path: ../any_link
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

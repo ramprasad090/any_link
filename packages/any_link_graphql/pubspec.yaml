@@ -1,0 +1,36 @@
+name: any_link_graphql
+description: "GraphQL client with queries, mutations, subscriptions, normalized cache, auto-persisted queries, and file upload. Zero extra dependencies."
+version: 1.0.0
+homepage: https://github.com/ramprasads090/any_link
+repository: https://github.com/ramprasad090/any_link
+issue_tracker: https://github.com/ramprasad090/any_link/issues
+
+topics:
+  - graphql
+  - api
+  - cache
+  - subscriptions
+  - flutter
+
+platforms:
+  android:
+  ios:
+  web:
+  macos:
+  windows:
+  linux:
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  any_link:
+    path: ../any_link
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

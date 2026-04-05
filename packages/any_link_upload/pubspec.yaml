@@ -1,0 +1,36 @@
+name: any_link_upload
+description: "Upload manager for any_link. Real progress tracking through 8 phases: validate, compress, hash, chunk, upload, server-processing, retry, complete. Zero extra dependencies."
+version: 1.0.0
+homepage: https://github.com/ramprasad090/any_link
+repository: https://github.com/ramprasad090/any_link
+issue_tracker: https://github.com/ramprasad090/any_link/issues
+
+topics:
+  - upload
+  - file-upload
+  - multipart
+  - progress
+  - http
+
+platforms:
+  android:
+  ios:
+  web:
+  macos:
+  windows:
+  linux:
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  any_link:
+    path: ../any_link
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
