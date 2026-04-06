@@ -7,6 +7,8 @@ import '../models/config.dart';
 import '../models/error.dart';
 import '../models/request.dart';
 import '../models/response.dart';
+// ignore: unnecessary_import — needed for AnyLinkTransport type on web
+import 'transport/any_link_transport.dart';
 import 'transport/transport_stub.dart'
     if (dart.library.io) 'transport/transport_io.dart'
     if (dart.library.html) 'transport/transport_web.dart';

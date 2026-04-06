@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Fix "AnyLinkTransport not found" on Flutter Web by separating the abstract class into any_link_transport.dart imported unconditionally
+
 ## 1.2.0
 
 - Full Flutter Web support via platform-adaptive transport

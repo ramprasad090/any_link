@@ -7,7 +7,7 @@ import '../../models/cancel_token.dart';
 import '../../models/config.dart';
 import '../../models/request.dart';
 import '../../models/response.dart';
-import 'transport_stub.dart';
+import 'any_link_transport.dart';
 
 AnyLinkTransport createTransport(AnyLinkConfig config) =>
     IoTransport(config);
