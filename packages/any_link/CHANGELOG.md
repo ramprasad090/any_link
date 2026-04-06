@@ -1,3 +1,11 @@
+## 1.2.0
+
+- Full Flutter Web support via platform-adaptive transport
+- Native platforms (Android, iOS, macOS, Windows, Linux): dart:io HttpClient
+- Web platform: dart:html XHR with arraybuffer response
+- AnyLinkFormData: addFile() is now native-only; addFileBytes() works on all platforms
+- Conditional imports: transport_io.dart / transport_web.dart / transport_stub.dart
+
 ## 1.1.0
 
 - Implemented real SHA-256 (FIPS 180-4) and HMAC-SHA256 in pure Dart — zero third-party dependencies
