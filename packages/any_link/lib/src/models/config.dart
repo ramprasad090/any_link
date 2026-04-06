@@ -80,7 +80,7 @@ class AnyLinkConfig {
     this.maxConnectionsPerHost = 6,
     this.defaultHeaders = const {},
     this.enableCompression = true,
-    this.enableHttp2 = true,
+    this.enableHttp2 = false,
     this.enableDeduplication = true,
     this.enableIdempotencyKeys = false,
     this.errorMapper,

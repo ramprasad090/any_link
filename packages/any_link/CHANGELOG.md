@@ -1,3 +1,7 @@
+## 1.2.2
+
+- Change enableHttp2 default to false — HTTP/2 ALPN breaks shared hosting (Hostinger, cPanel, etc.) that only supports HTTP/1.1. Opt in explicitly with enableHttp2: true.
+
 ## 1.2.1
 
 - Fix "AnyLinkTransport not found" on Flutter Web by separating the abstract class into any_link_transport.dart imported unconditionally
